@@ -19,14 +19,14 @@
 #include "physicsengine.h"
 #include "car.h"
 
-const int GENERATIONS = 5;			//how many breeding generations. TODO: don't forget to change
+const int GENERATIONS = 10;			//how many breeding generations. TODO: don't forget to change
 const int MAXCARS = 1000;			//maximum # of cars.  more than this will segfault
 const int KILLMAX = 20;				//kill all but this many cars. AKA number of survivors
-const int INITIAL_POPULATION = 20;	//how many cars we start with
+const int INITIAL_POPULATION = 30;	//how many cars we start with
 const int SIMULATION_LENGTH = 2000; //how long a car can run before we give up and kill it
 const int NUM_BALLS_IN_CAR = 10;	//how many balls a car is generated with
-const int BREED_RATE = 3;			//chance a car will breed
-const int MUTATE_RATE = 5;			//chance a car will mutate
+const int BREED_RATE = 10;			//chance a car will breed
+const int MUTATE_RATE = 10;			//chance a car will mutate
 
 
 int WIDTH = 500, HEIGHT = 500;		//screen width and height
@@ -65,7 +65,7 @@ void TimerHandler::onTimer()
 
 	if (iterations >= SIMULATION_LENGTH || pos >= WIDTH)//if we exceed the simulation length or go past it
 	{
-		//qDebug() << iterations << " iterations, position=" << pos << endl;
+		qDebug() << iterations << " iterations, position=" << pos << endl;
 		car[currentCar]->score(iterations, pos);
 		car[currentCar]->deconstructCar();
 
@@ -75,7 +75,7 @@ void TimerHandler::onTimer()
 			simulating = FALSE;
 			for (int i = 0; i < CarCount; i++)
 			{
-				//qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
+				qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
 			}
 		}
 		else
