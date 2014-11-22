@@ -120,7 +120,7 @@ void kill()//TODO: sort cars by score, kill off all but KILLMAX best
 		for (int j = 0; j < CarCount - 1; j++)
 		{
 			//determine whose score is better
-			if ((car[j + 1]->position > car[j]->position) || ((car[j + 1]->position == 500 && car[j]->position == 500) && (car[j + 1]->iterations < car[j]->iterations)))//
+			if ((car[j + 1]->position > car[j]->position) /*|| ((car[j + 1]->position == 500 && car[j]->position == 500) && (car[j + 1]->iterations > car[j]->iterations))*/)
 			{
 				Car* temp = car[j + 1];
 				car[j + 1] = car[j];
@@ -199,7 +199,7 @@ void doCars()//does all the racing, breeding...behind the scenes. when it's fini
 		}
 		for (int i = 0; i < CarCount; i++)//for all cars, print out their scores
 		{
-			//qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
+			qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
 		}
 
 		kill();//kill the losers
