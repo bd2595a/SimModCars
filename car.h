@@ -26,6 +26,7 @@ public:
 	//methods we write
 	Car* breed(Car*);//breeds the car with another car, returning a child car
 	Car* mutate();//mutates a current car, returning the mutant
+
 	//destructor called in delete car
 	~Car()
 	{

@@ -3,6 +3,8 @@
 #include "ball.h"
 #include <QtGui>
 
+const int MUTATION_RATE = 3;		//how likely each component in a car will be mutated
+
 //random number between [a,b] 
 int randint(int a, int b)
 {
@@ -11,14 +13,71 @@ int randint(int a, int b)
 
 Car* Car::mutate()
 {
-	Car* newcar = new Car(nodes);
-	return newcar;
+	Car* mutant = new Car(nodes);
+	for (int j = 0; j < nodes; j++)//make our mutant a clone
+	{
+		mutant->balls_x[j] = balls_x[j];
+		mutant->balls_y[j] = balls_y[j];
+	}
+	for (int j = 0; j < nodes; j++)//mutate balls
+	{
+		if (rand() % 100 < MUTATION_RATE)//if this ball gets mutated
+		{
+			mutant->balls_x[j] = rand() % (45) + 5;//random number between 5 and 50
+			mutant->balls_y[j] = rand() % (45) + 5;//random number between 5 and 50
+		}
+	}
+	for (int j = 0; j < nodes; j++)//mutate links
+	{
+		for (int k = 0; k < nodes; k++)
+		{
+			if (j <= k) continue;
+			if (rand() % 100 < MUTATION_RATE)//if this link gets mutated
+			{
+				mutant->links[j][k] = mutant->links[j][k] == 1 ? 0 : 1;//if it has a 1, make it a 0 and vice versa
+			}
+		}
+	}
+
+	return mutant;
 }
 
 Car* Car::breed(Car* c)
 {
-	Car* newcar = new Car(nodes);
-	return newcar;
+	int twistPoint = rand() % nodes;
+	Car* baby = new Car(nodes);
+	for (int k = 0; k < nodes; k++)//breeds the balls in the car
+	{
+		if (k < twistPoint)
+		{
+			baby->balls_x[k] = balls_x[k];
+			baby->balls_y[k] = balls_y[k];
+		}
+		else
+		{
+			baby->balls_x[k] = c->balls_x[k];
+			baby->balls_y[k] = c->balls_y[k];
+		}
+	}
+	twistPoint = rand() % nodes;
+	{
+		for (int k = 0; k < nodes; k++)//breeding the links
+		{
+			for (int g = 0; g < nodes; g++)
+			{
+				if (k <= g) continue;
+				if (k < twistPoint)
+				{
+					baby->links[k][g] = links[k][g];
+				}
+				else
+				{
+					baby->links[k][g] = c->links[k][g];
+				}
+			}
+		}
+	}
+	return baby;
 }
 
 //makes a random car

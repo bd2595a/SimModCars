@@ -19,12 +19,15 @@
 #include "physicsengine.h"
 #include "car.h"
 
-const int GENERATIONS = 1;			//how many breeding generations. TODO: don't forget to change
+const int GENERATIONS = 5;			//how many breeding generations. TODO: don't forget to change
 const int MAXCARS = 1000;			//maximum # of cars.  more than this will segfault
 const int KILLMAX = 20;				//kill all but this many cars. AKA number of survivors
-const int INITIAL_POPULATION = 30;	//how many cars we start with
+const int INITIAL_POPULATION = 20;	//how many cars we start with
 const int SIMULATION_LENGTH = 2000; //how long a car can run before we give up and kill it
 const int NUM_BALLS_IN_CAR = 10;	//how many balls a car is generated with
+const int BREED_RATE = 3;			//chance a car will breed
+const int MUTATE_RATE = 5;			//chance a car will mutate
+
 
 int WIDTH = 500, HEIGHT = 500;		//screen width and height
 QGraphicsScene* thescene;			//window component
@@ -62,7 +65,7 @@ void TimerHandler::onTimer()
 
 	if (iterations >= SIMULATION_LENGTH || pos >= WIDTH)//if we exceed the simulation length or go past it
 	{
-		qDebug() << iterations << " iterations, position=" << pos << endl;
+		//qDebug() << iterations << " iterations, position=" << pos << endl;
 		car[currentCar]->score(iterations, pos);
 		car[currentCar]->deconstructCar();
 
@@ -72,7 +75,7 @@ void TimerHandler::onTimer()
 			simulating = FALSE;
 			for (int i = 0; i < CarCount; i++)
 			{
-				qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
+				//qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
 			}
 		}
 		else
@@ -111,14 +114,62 @@ void kill()//TODO: sort cars by score, kill off all but KILLMAX best
 //  2. if car dist > 500, lowest framecount wins
 {
 	//delete car on cars that were killed
+	//sort cars by their score
+	for (int i = 0; i < CarCount; i++)
+	{
+		for (int j = 0; j < CarCount - 1; j++)
+		{
+			//determine whose score is better
+			if ((car[j + 1]->position > car[j]->position) || ((car[j + 1]->position == 500 && car[j]->position == 500) && (car[j + 1]->iterations < car[j]->iterations)))//
+			{
+				Car* temp = car[j + 1];
+				car[j + 1] = car[j];
+				car[j] = temp;
+			}
+		}
+	}
+	/*CarCount = KILLMAX;
+	for (int i = 0; i < CarCount; i++)
+	{
+	if (i > KILLMAX)
+	{
+	car[i]->deconstructCar();
+	delete car[i];
+	}
+	}*/
+	CarCount = KILLMAX;
 }
 
 void breed()//consider every pair of cars, roll random, if we decide to breed, breed them
 {
+	int breedingPop = CarCount;
+
+	//	breed. For all DNAs, for all DNAs (excluding the original)
+	for (int i = 0; i < breedingPop; i++)
+	{
+		for (int j = 0; j < breedingPop; j++)
+		{
+			if (i == j)
+				continue;
+			if (rand() % 100 < BREED_RATE)//20% chance to  breed
+			{
+				car[CarCount++] = car[i]->breed(car[j]);
+				////qDebug() << "daddy is " << dna[i]->getValue() << ", Mom is " << dna[j]->getValue() << "and baby is " << dna[population - 1]->getValue() << endl;
+			}
+		}
+	}
 }
 
 void mutate()//consider every car, roll random, clone if we decide to and mutate. add it. 
 {
+	int cloningCars = CarCount;
+	for (int i = 0; i < cloningCars; i++)
+	{
+		if (rand() % 100 < MUTATE_RATE)//if this car gets mutated
+		{
+			car[CarCount++] = car[i]->mutate();
+		}
+	}
 }
 
 void doCars()//does all the racing, breeding...behind the scenes. when it's finished, you have your super cars that are ready to display
@@ -142,14 +193,14 @@ void doCars()//does all the racing, breeding...behind the scenes. when it's fini
 				if (pos >= WIDTH) break;//if we made it to the finish line, stop simulating
 			}
 
-			qDebug() << t << " iterations, position=" << pos << endl; //print out how the car did
+			//qDebug() << t << " iterations, position=" << pos << endl; //print out how the car did
 			car[i]->score(t, pos);//save the score
 			simulating = FALSE;//stop simulation
 			car[i]->deconstructCar();//remove the car from the track
 		}
 		for (int i = 0; i < CarCount; i++)//for all cars, print out their scores
 		{
-			qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
+			//qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
 		}
 
 		kill();//kill the losers
