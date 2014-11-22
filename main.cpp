@@ -144,7 +144,7 @@ void breed()//consider every pair of cars, roll random, if we decide to breed, b
 {
 	int breedingPop = CarCount;
 
-	//	breed. For all DNAs, for all DNAs (excluding the original)
+	//	breed. For all cars, for all cars (excluding the original)
 	for (int i = 0; i < breedingPop; i++)
 	{
 		for (int j = 0; j < breedingPop; j++)
@@ -154,7 +154,6 @@ void breed()//consider every pair of cars, roll random, if we decide to breed, b
 			if (rand() % 100 < BREED_RATE)//20% chance to  breed
 			{
 				car[CarCount++] = car[i]->breed(car[j]);
-				////qDebug() << "daddy is " << dna[i]->getValue() << ", Mom is " << dna[j]->getValue() << "and baby is " << dna[population - 1]->getValue() << endl;
 			}
 		}
 	}
