@@ -194,12 +194,12 @@ void doCars()//does all the racing, breeding...behind the scenes. when it's fini
 			simulating = FALSE;//stop simulation
 			car[i]->deconstructCar();//remove the car from the track
 		}
-		for (int i = 0; i < CarCount; i++)//for all cars, print out their scores
+		
+		kill();//kill the losers
+		for (int i = 0; i < KILLMAX; i++)//for all cars, print out their scores
 		{
 			qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
 		}
-
-		kill();//kill the losers
 		breed();//breed the remaining
 		mutate();//mutate the remaining
 	}
