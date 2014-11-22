@@ -128,15 +128,15 @@ void kill()//TODO: sort cars by score, kill off all but KILLMAX best
 			}
 		}
 	}
-	/*CarCount = KILLMAX;
+	//CarCount = KILLMAX;
 	for (int i = 0; i < CarCount; i++)
 	{
-	if (i > KILLMAX)
-	{
-	car[i]->deconstructCar();
-	delete car[i];
+		if (i > KILLMAX)
+		{
+			car[i]->deconstructCar();
+			delete car[i];
+		}
 	}
-	}*/
 	CarCount = KILLMAX;
 }
 
