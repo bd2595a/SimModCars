@@ -3,7 +3,7 @@
 #include "ball.h"
 #include <QtGui>
 
-const int MUTATION_RATE = 10;		//how likely each component in a car will be mutated
+const int MUTATION_RATE = 70;		//how likely each component in a car will be mutated
 
 //random number between [a,b] 
 int randint(int a, int b)

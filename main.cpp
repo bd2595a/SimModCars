@@ -22,11 +22,11 @@
 const int GENERATIONS = 20;			//how many breeding generations. TODO: don't forget to change
 const int MAXCARS = 1000;			//maximum # of cars.  more than this will segfault
 const int KILLMAX = 20;				//kill all but this many cars. AKA number of survivors
-const int INITIAL_POPULATION = 30;	//how many cars we start with
-const int SIMULATION_LENGTH = 2000; //how long a car can run before we give up and kill it
+const int INITIAL_POPULATION = 50;	//how many cars we start with
+const int SIMULATION_LENGTH = 2200; //how long a car can run before we give up and kill it
 const int NUM_BALLS_IN_CAR = 10;	//how many balls a car is generated with
-const int BREED_RATE = 30;			//chance a car will breed
-const int MUTATE_RATE = 45;			//chance a car will mutate
+const int BREED_RATE = 35;			//chance a car will breed
+const int MUTATE_RATE = 25;			//chance a car will mutate
 
 
 int WIDTH = 500, HEIGHT = 500;		//screen width and height
@@ -120,7 +120,7 @@ void kill()//TODO: sort cars by score, kill off all but KILLMAX best
 		for (int j = 0; j < CarCount - 1; j++)
 		{
 			//determine whose score is better
-			if ((car[j + 1]->position > car[j]->position) /*|| ((car[j + 1]->position == 500 && car[j]->position == 500) && (car[j + 1]->iterations > car[j]->iterations))*/)
+			if ((car[j + 1]->position > car[j]->position) || ((car[j + 1]->position == 500 && car[j]->position == 500) && (car[j+1]->iterations>200 && car[j + 1]->iterations > car[j]->iterations)))
 			{
 				Car* temp = car[j + 1];
 				car[j + 1] = car[j];
@@ -196,7 +196,7 @@ void doCars()//does all the racing, breeding...behind the scenes. when it's fini
 		}
 		
 		kill();//kill the losers
-		for (int i = 0; i < KILLMAX; i++)//for all cars, print out their scores
+		for (int i = 0; i < KILLMAX-1; i++)//for all cars, print out their scores
 		{
 			qDebug() << "Car " << i << ": itr: " << car[i]->iterations << ", pos: " << car[i]->position << endl;
 		}
